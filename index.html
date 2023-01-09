@@ -10,6 +10,22 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
     <!-- Leaflet Google Maps JavaScript Plugin -->
     <script src="https://unpkg.com/leaflet-plugins@1.6.0/layer/tile/Google.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Londrina+Solid|Oswald:700|Archivo+Narrow|Source+Sans+Pro:400,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <!--Google Maps API NO Key!! -->
+  <!--script src="https://maps.google.com/maps/api/js?v=3"></script-->
+  <!--Leaflet 1.0.3-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <!--Leaflet Plugins-->
+  <link rel="stylesheet" type="text/css" href="assets/L.VisualClick.css" />
+  <script src="assets/L.VisualClick.js"></script>
+  <!--script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script-->
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
+  <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+  <!--script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/2.6.2/leaflet-routing-machine.min.js"></script-->
   </head>
   <body>
     <!-- Map container -->
@@ -17,16 +33,34 @@
 
     <script>
       // Initialize map
-      const map = L.map('map').setView([0, 0], 2);
+   <!--   const map = L.map('map').setView([0, 0], 2);
 
       // Add Google Maps layer to map
       L.tileLayer.google('roadmap').addTo(map);
 
       // Replace 'YOUR_API_KEY' with your own Google API key
-      const apiKey = 'YOUR_API_KEY';
+      const apiKey = 'YOUR_API_KEY'; -->
+        
+        var map = L.map('map')
+      .setView([40.410976, -82.928835], 8);
+
+    //L.hash(map);
+    var cartodbLight = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+      subdomains: 'abcd'
+    }).addTo(map);
+//     var googleStreets = L.gridLayer.googleMutant({
+//       type: 'roadmap' // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+//     }).addTo(map);
+
+    //layer control
+    var baselayers = {
+//       "Google Street" : googleStreets,
+      "Grayscale"     : cartodbLight
+    };
 
       // Replace 'CALENDAR_ID' with the ID of your Google Calendar
-      const calendarId = 'CALENDAR_ID';
+      const calendarId = 'Y3Rmb29kYmFuay5ldmVudHNAZ21haWwuY29';
 
       // Fetch events from Google Calendar
       fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?key=${apiKey}`)
