@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Calendar Map</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <!-- Leaflet Google Maps JavaScript Plugin -->
+    <script src="https://unpkg.com/leaflet-plugins@1.6.0/layer/tile/Google.js"></script>
+  </head>
+  <body>
+    <!-- Map container -->
+    <div id="map" style="height: 600px;"></div>
+
+    <script>
+      // Initialize map
+      const map = L.map('map').setView([0, 0], 2);
+
+      // Add Google Maps layer to map
+      L.tileLayer.google('roadmap').addTo(map);
+
+      // Replace 'YOUR_API_KEY' with your own Google API key
+      const apiKey = 'YOUR_API_KEY';
+
+      // Replace 'CALENDAR_ID' with the ID of your Google Calendar
+      const calendarId = 'CALENDAR_ID';
+
+      // Fetch events from Google Calendar
+      fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?key=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+          // Add markers for each event on the map
+          data.items.forEach(event => {
+            if (event.location) {
+              // Parse latitude and longitude from event location
+              const latLng = event.location.split(',');
+              const lat = parseFloat(latLng[0]);
+              const lng = parseFloat(latLng[1]);
+
+              // Add marker to map
+              L.marker([lat, lng]).addTo(map)
+                .bindPopup(`<b>${event.summary}</b><br>${event.location}`);
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
